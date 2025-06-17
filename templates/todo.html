@@ -39,7 +39,7 @@
                 <tbody>
                   {% for i in todos %}
                   <tr>
-                    <td>{{i.todo_name}}</td>
+                    <td>{{i.todoname}}</td>
 
                     {% if i.status == True %}
                       <td>Completed</td>
@@ -48,8 +48,8 @@
                     {% endif %}
 
                     <td>
-                      <a href="{% url 'delete' i.todo_name %}"><button type="submit" class="btn btn-danger">Delete</button></a>
-                      <a href="{% url 'update' i.todo_name %}"><button type="submit" class="btn btn-success ms-1">Finished</button></a>
+                    <a href="{% url 'delete' i.todoname %}"><button type="submit" class="btn btn-danger">Delete</button></a>  
+                      <a href="{% url 'update' i.todoname %}"><button type="submit" class="btn btn-success ms-1">Finished</button></a> 
                     </td>
                   </tr>
                   {% endfor %}

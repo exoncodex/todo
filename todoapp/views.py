@@ -1,14 +1,23 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate,logout,login
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from todoapp.models import Todo
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
     if request.user.is_anonymous:
         return redirect("login")
-    return render(request, "todo.html")
+    if request.method == "POST":
+        task=request.POST.get("task")
+        usave=Todo(user=request.user,todoname=task)
+        usave.save()
+    all_todo=Todo.objects.filter(user=request.user)
+    context={
+       "todos":all_todo
+     }
+    return render(request, "todo.html",context)
 def loginpage(request):
   if request.method == "POST":
     passw=request.POST.get("passw")
@@ -42,5 +51,16 @@ def register(request):
 def logoutpage(request):
   logout(request)
   return redirect("login")
+@login_required
+def delete(request,name):
+    task=get_object_or_404(Todo,user=request.user,todoname=name)
+    task.delete()
+    return redirect('home')
+@login_required
+def update(request,name):
+  task=get_object_or_404(Todo,user=request.user,todoname=name)
+  task.status = True
+  task.save()
+  return redirect("home")
  
   
